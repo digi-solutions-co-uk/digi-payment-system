@@ -1,0 +1,57 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Helper function to check if user is authenticated
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    // Users collection - authenticated users can read all (needed for role checking)
+    // Users can read their own document and all others (for role-based UI)
+    match /users/{userId} {
+      allow read: if isAuthenticated();
+      // Allow authenticated users to write - Cloud Functions should handle admin checks
+      allow write: if isAuthenticated();
+    }
+    
+    // Customers collection - authenticated users can read/write
+    // Role checking will be done in Cloud Functions and frontend
+    match /customers/{customerId} {
+      allow read, write: if isAuthenticated();
+    }
+    
+    // Branches collection - authenticated users can read/write
+    match /branches/{branchId} {
+      allow read, write: if isAuthenticated();
+    }
+    
+    // Plans collection - authenticated users can read, write allowed for all
+    // Admin checks should be done in Cloud Functions
+    match /plans/{planId} {
+      allow read: if isAuthenticated();
+      allow write: if isAuthenticated();
+    }
+    
+    // Subscriptions collection - authenticated users can read/write
+    match /subscriptions/{subscriptionId} {
+      allow read, write: if isAuthenticated();
+    }
+    
+    // Invoices collection - authenticated users can read/write
+    match /invoices/{invoiceId} {
+      allow read, write: if isAuthenticated();
+    }
+    
+    // Payments collection - authenticated users can read/write
+    match /payments/{paymentId} {
+      allow read, write: if isAuthenticated();
+    }
+    
+    // Activity log - authenticated users can read, only Cloud Functions can write
+    match /activityLog/{logId} {
+      allow read: if isAuthenticated();
+      allow write: if false; // Only Cloud Functions can write
+    }
+  }
+}
+

@@ -1,0 +1,30 @@
+node_modules/
+dist/
+build/
+.env
+.env.local
+.firebase/
+*.log
+.DS_Store
+
+# Frontend
+frontend/node_modules/
+frontend/dist/
+frontend/build/
+
+# Functions
+functions/node_modules/
+functions/lib/
+functions/.env
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
