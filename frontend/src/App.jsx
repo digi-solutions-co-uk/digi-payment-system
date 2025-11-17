@@ -15,7 +15,7 @@ function AppRoutes() {
   const { currentUser } = useAuth();
 
   return (
-    <Router>
+    <Router basename="/digi-payment-system">
       <Routes>
         <Route
           path="/login"
