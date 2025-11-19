@@ -21,7 +21,7 @@ export function Sidebar() {
   return (
     <div className="sidebar">
       <div className="sidebar-header">
-        <h2>Digi Payment</h2>
+        <h2>Digi Payment System</h2>
       </div>
       <nav className="sidebar-nav">
         {menuItems.map((item) => (

@@ -1,7 +1,7 @@
 {
   "name": "digi-payment-system",
   "version": "1.0.0",
-  "description": "Subscription and Invoice Management System",
+  "description": "Digi Payment System - Subscription and Invoice Management System",
   "private": true,
   "scripts": {
     "dev": "cd frontend && npm run dev",

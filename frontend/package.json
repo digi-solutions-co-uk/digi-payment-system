@@ -2,6 +2,7 @@
   "name": "frontend",
   "private": true,
   "version": "0.0.0",
+  "description": "Digi Payment System - Frontend Application",
   "type": "module",
   "scripts": {
     "dev": "vite",
