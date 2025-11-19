@@ -38,6 +38,8 @@ jobs:
         run: |
           cd frontend
           npm run build
+          # Copy index.html to 404.html for GitHub Pages SPA routing
+          cp dist/index.html dist/404.html
         env:
           NODE_ENV: production
 

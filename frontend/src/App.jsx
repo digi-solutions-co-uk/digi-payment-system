@@ -1,15 +1,20 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { AuthProvider, useAuth } from './contexts/AuthContext';
-import { PrivateRoute } from './components/PrivateRoute';
-import { Sidebar } from './components/Sidebar';
-import { Login } from './pages/Login';
-import { Dashboard } from './pages/Dashboard';
-import { Customers } from './pages/Customers';
-import { CustomerProfile } from './pages/CustomerProfile';
-import { Plans } from './pages/Plans';
-import { Staff } from './pages/Staff';
-import { Analytics } from './pages/Analytics';
-import './App.css';
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
+import { AuthProvider, useAuth } from "./contexts/AuthContext";
+import { PrivateRoute } from "./components/PrivateRoute";
+import { Sidebar } from "./components/Sidebar";
+import { Login } from "./pages/Login";
+import { Dashboard } from "./pages/Dashboard";
+import { Customers } from "./pages/Customers";
+import { CustomerProfile } from "./pages/CustomerProfile";
+import { Plans } from "./pages/Plans";
+import { Staff } from "./pages/Staff";
+import { Analytics } from "./pages/Analytics";
+import "./App.css";
 
 function AppRoutes() {
   const { currentUser } = useAuth();

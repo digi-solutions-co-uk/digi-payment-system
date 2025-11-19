@@ -1,0 +1,978 @@
+[
+  {
+    "bankName": "GOLDEN DELIGHT LIMITED",
+    "name": "Golden delight",
+    "storeId": "753",
+    "status": "Active",
+    "contactPerson": "",
+    "contactPhone": ""
+  },
+  {
+    "bankName": "RETFORD KEBAB LTD - TOPKAPI KEBAB LTD",
+    "name": "Top kapi Grill",
+    "storeId": "9257",
+    "status": "Active",
+    "contactPerson": "",
+    "contactPhone": ""
+  },
+  {
+    "bankName": "KEMAL ULGU",
+    "name": "Thuso best kebab",
+    "storeId": "9096",
+    "status": "Active",
+    "contactPerson": "",
+    "contactPhone": ""
+  },
+  {
+    "bankName": "Faisal Curry House & Pizza Bar Limited - menu",
+    "name": "faisal curry and pizza",
+    "storeId": "796269",
+    "status": "Active",
+    "contactPerson": "",
+    "contactPhone": ""
+  },
+  {
+    "bankName": "MARTIN&ROSIE LTD T - DIGITAL BOARD - tv screens",
+    "name": "Layton Pizza",
+    "storeId": "796947",
+    "status": "Active",
+    "contactPerson": "",
+    "contactPhone": ""
+  },
+  {
+    "bankName": "SLICE OF HEAVEN LI",
+    "name": "Sabeez mutley",
+    "storeId": "875563",
+    "status": "Active",
+    "contactPerson": "",
+    "contactPhone": ""
+  },
+  {
+    "bankName": "GEORGE S OF ST CLE",
+    "name": "George's chip",
+    "storeId": "809838",
+    "status": "Active",
+    "contactPerson": "",
+    "contactPhone": ""
+  },
+  {
+    "bankName": "P LTD T/AS SABEE",
+    "name": "Sabeez Plymouth",
+    "storeId": "812500",
+    "status": "Active",
+    "contactPerson": "",
+    "contactPhone": ""
+  },
+  {
+    "bankName": "A ATUG",
+    "name": "Aberdare Charcoal Grill",
+    "storeId": "792349",
+    "status": "Active",
+    "contactPerson": "",
+    "contactPhone": ""
+  },
+  {
+    "bankName": "SARSYAN 80 LTD / 7&elevensarsyanltd",
+    "name": "7 & eleven",
+    "storeId": "798063",
+    "status": "Active",
+    "contactPerson": "",
+    "contactPhone": ""
+  },
+  {
+    "bankName": "HNH INVERNESS LTD - BIGSZEF",
+    "name": "Big Szef",
+    "storeId": "852207",
+    "status": "Active",
+    "contactPerson": "",
+    "contactPhone": ""
+  },
+  {
+    "bankName": "NEW GRILL LIMITED",
+    "name": "Luckys Diner Rhyl",
+    "storeId": "883935",
+    "status": "Active",
+    "contactPerson": "",
+    "contactPhone": ""
+  },
+  {
+    "bankName": "DASI FRY LTD",
+    "name": "lucky's south sheilds",
+    "storeId": "883936",
+    "status": "Active",
+    "contactPerson": "",
+    "contactPhone": ""
+  },
+  {
+    "bankName": "LIEGE WAFFLES LTD",
+    "name": "Liege waffles",
+    "storeId": "883451",
+    "status": "Active",
+    "contactPerson": "",
+    "contactPhone": ""
+  },
+  {
+    "bankName": "CAFE DELIGHTS ROSS",
+    "name": "cafe delight",
+    "storeId": "886454",
+    "status": "Active",
+    "contactPerson": "",
+    "contactPhone": ""
+  },
+  {
+    "bankName": "MOHAMED NASR EL DI",
+    "name": "Sanchos Kebab & Pizza",
+    "storeId": "828622",
+    "status": "Active",
+    "contactPerson": "",
+    "contactPhone": ""
+  },
+  {
+    "bankName": "Ganic Pizzeria Ltd - Tv programming - fabric",
+    "name": "Pizzaganic",
+    "storeId": "825378",
+    "status": "Active",
+    "contactPerson": "",
+    "contactPhone": ""
+  },
+  {
+    "bankName": "GRILWAYS LTD T/A G",
+    "name": "Grill ways",
+    "storeId": "979",
+    "status": "Active",
+    "contactPerson": "",
+    "contactPhone": ""
+  },
+  {
+    "bankName": "W Zahoor",
+    "name": "Flames Stone",
+    "storeId": "481",
+    "status": "Active",
+    "contactPerson": "",
+    "contactPhone": ""
+  },
+  {
+    "bankName": "BONJUK LTD",
+    "name": "Anatolia Takeaway",
+    "storeId": "844951",
+    "status": "Active",
+    "contactPerson": "",
+    "contactPhone": ""
+  },
+  {
+    "bankName": "HOME BURGER LTD",
+    "name": "Kebab House",
+    "storeId": "792371",
+    "status": "Active",
+    "contactPerson": "",
+    "contactPhone": ""
+  },
+  {
+    "bankName": "INDIAN KITCHEN 202 - ROYAL BALTI BARRY",
+    "name": "Royal Balti - Barry",
+    "storeId": "548",
+    "status": "Active",
+    "contactPerson": "",
+    "contactPhone": ""
+  },
+  {
+    "bankName": "KAYAK SPACE LTD",
+    "name": "Flames Pizza and Grill",
+    "storeId": "798200",
+    "status": "Active",
+    "contactPerson": "",
+    "contactPhone": ""
+  },
+  {
+    "bankName": "Millennium P",
+    "name": "Millennium Pizza",
+    "storeId": "1583",
+    "status": "Active",
+    "contactPerson": "",
+    "contactPhone": ""
+  },
+  {
+    "bankName": "TAF Bar LTD - The anchor",
+    "name": "The Anchor Fishbar",
+    "storeId": "7763",
+    "status": "Active",
+    "contactPerson": "",
+    "contactPhone": ""
+  },
+  {
+    "bankName": "King cod",
+    "name": "king cod",
+    "storeId": "882940",
+    "status": "Active",
+    "contactPerson": "",
+    "contactPhone": ""
+  },
+  {
+    "bankName": "CASPIAN ST JOHNS - M Shah",
+    "name": "Caspian Pizza St Johns",
+    "storeId": "813623",
+    "status": "Active",
+    "contactPerson": "",
+    "contactPhone": ""
+  },
+  {
+    "bankName": "MILANO EXPRESS - MILANS EXP LTD",
+    "name": "Milano Express",
+    "storeId": "796654",
+    "status": "Active",
+    "contactPerson": "",
+    "contactPhone": ""
+  },
+  {
+    "bankName": "PIZZERIA CAPRI LTD",
+    "name": "Pizzeria Capri limited",
+    "storeId": "809402",
+    "status": "Active",
+    "contactPerson": "",
+    "contactPhone": ""
+  },
+  {
+    "bankName": "TWO BROTHERS LS12",
+    "name": "two brothers LS12",
+    "storeId": "881700",
+    "status": "Active",
+    "contactPerson": "",
+    "contactPhone": ""
+  },
+  {
+    "bankName": "ZAHRAS MIDDLETON L / Two brothers LS10",
+    "name": "two brothers LS10",
+    "storeId": "876115",
+    "status": "Active",
+    "contactPerson": "",
+    "contactPhone": ""
+  },
+  {
+    "bankName": "DNP FOOD LIMITED",
+    "name": "Partington street food",
+    "storeId": "872531",
+    "status": "Active",
+    "contactPerson": "",
+    "contactPhone": ""
+  },
+  {
+    "bankName": "VARIETY'S",
+    "name": "variety's",
+    "storeId": "146",
+    "status": "Active",
+    "contactPerson": "",
+    "contactPhone": ""
+  },
+  {
+    "bankName": "KRAVINGS LS LTD",
+    "name": "Kravings",
+    "storeId": "812261",
+    "status": "Active",
+    "contactPerson": "",
+    "contactPhone": ""
+  },
+  {
+    "bankName": "Nido's Pizza",
+    "name": "Nido's Pizza",
+    "storeId": "7309",
+    "status": "Active",
+    "contactPerson": "",
+    "contactPhone": ""
+  },
+  {
+    "bankName": "C LTD T/AS CHILL",
+    "name": "Chilli Rocks",
+    "storeId": "982",
+    "status": "Active",
+    "contactPerson": "",
+    "contactPhone": ""
+  },
+  {
+    "bankName": "PD Tas Trading Ltd - H kayik",
+    "name": "Sizzlers Ayr Takeaway",
+    "storeId": "850676",
+    "status": "Active",
+    "contactPerson": "",
+    "contactPhone": ""
+  },
+  {
+    "bankName": "HIKMIT LTD T/A SIS",
+    "name": "Sisi pizzeria",
+    "storeId": "5513",
+    "status": "Active",
+    "contactPerson": "",
+    "contactPhone": ""
+  },
+  {
+    "bankName": "Y KABALA",
+    "name": "Yasko Traditional Fish And Chips",
+    "storeId": "831269",
+    "status": "Active",
+    "contactPerson": "",
+    "contactPhone": ""
+  },
+  {
+    "bankName": "GAZIMK LIMITED T/A",
+    "name": "Mangal Plus",
+    "storeId": "796022",
+    "status": "Active",
+    "contactPerson": "",
+    "contactPhone": ""
+  },
+  {
+    "bankName": "Imran Yasin - KFS",
+    "name": "Kfs fast food",
+    "storeId": "234",
+    "status": "Active",
+    "contactPerson": "",
+    "contactPhone": ""
+  },
+  {
+    "bankName": "SMAYS UK LTD",
+    "name": "Wrexham Kebab Pizza",
+    "storeId": "800960",
+    "status": "Active",
+    "contactPerson": "",
+    "contactPhone": ""
+  },
+  {
+    "bankName": "EP FAST FOOD LTD",
+    "name": "Eastern Promise",
+    "storeId": "459",
+    "status": "Active",
+    "contactPerson": "",
+    "contactPhone": ""
+  },
+  {
+    "bankName": "TEXAS FRIED CHICKEN LTD",
+    "name": "Texas Fried Chicken",
+    "storeId": "880853",
+    "status": "Active",
+    "contactPerson": "",
+    "contactPhone": ""
+  },
+  {
+    "bankName": "PAPA LUI TAKEAWAY",
+    "name": "Papa Lui",
+    "storeId": "8031",
+    "status": "Active",
+    "contactPerson": "",
+    "contactPhone": ""
+  },
+  {
+    "bankName": "MUR-HAM BURG",
+    "name": "Ohannes hucknall",
+    "storeId": "880029",
+    "status": "Active",
+    "contactPerson": "",
+    "contactPhone": ""
+  },
+  {
+    "bankName": "Q LTD T/AS QUICK",
+    "name": "quick bite",
+    "storeId": "883717",
+    "status": "Active",
+    "contactPerson": "",
+    "contactPhone": ""
+  },
+  {
+    "bankName": "K MURAD",
+    "name": "Oasis newcastle",
+    "storeId": "2605",
+    "status": "Active",
+    "contactPerson": "",
+    "contactPhone": ""
+  },
+  {
+    "bankName": "BERKAN GULDAL",
+    "name": "Turkish Delight",
+    "storeId": "793522",
+    "status": "Active",
+    "contactPerson": "",
+    "contactPhone": ""
+  },
+  {
+    "bankName": "M ALEWA - 3 GUYS PIZZA",
+    "name": "3 Guys pizza",
+    "storeId": "793755",
+    "status": "Active",
+    "contactPerson": "",
+    "contactPhone": ""
+  },
+  {
+    "bankName": "STAKEOUT LEEK LIMI",
+    "name": "stakeout",
+    "storeId": "379",
+    "status": "Active",
+    "contactPerson": "",
+    "contactPhone": ""
+  },
+  {
+    "bankName": "E BOMBOZ",
+    "name": "pizza mamma",
+    "storeId": "803474",
+    "status": "Active",
+    "contactPerson": "",
+    "contactPhone": ""
+  },
+  {
+    "bankName": "KEBAB BABA LTD",
+    "name": "Ali baba kebab",
+    "storeId": "9349",
+    "status": "Active",
+    "contactPerson": "",
+    "contactPhone": ""
+  },
+  {
+    "bankName": "pizzaline",
+    "name": "pizzaline",
+    "storeId": "799525",
+    "status": "Active",
+    "contactPerson": "",
+    "contactPhone": ""
+  },
+  {
+    "bankName": "Ashchin Ltd - COULBY FOODS LTD",
+    "name": "Chinos Pizzeria",
+    "storeId": "795589",
+    "status": "Active",
+    "contactPerson": "",
+    "contactPhone": ""
+  },
+  {
+    "bankName": "REDCAR PIZZA SHOP - DI MARE PIZZA LTD",
+    "name": "Gojis",
+    "storeId": "793509",
+    "status": "Active",
+    "contactPerson": "",
+    "contactPhone": ""
+  },
+  {
+    "bankName": "HOT SPOT 1 LTD - Hotspot",
+    "name": "Hot Spot Congleton",
+    "storeId": "426",
+    "status": "Active",
+    "contactPerson": "",
+    "contactPhone": ""
+  },
+  {
+    "bankName": "Mehmet Dagtekin",
+    "name": "Dinos",
+    "storeId": "796150",
+    "status": "Active",
+    "contactPerson": "",
+    "contactPhone": ""
+  },
+  {
+    "bankName": "INDIAN GREED - Greedy Coo",
+    "name": "Indian Greedy Coo",
+    "storeId": "795821",
+    "status": "Active",
+    "contactPerson": "",
+    "contactPhone": ""
+  },
+  {
+    "bankName": "MAZYY LIMITED T/A",
+    "name": "Grange Takeaway",
+    "storeId": "8766",
+    "status": "Active",
+    "contactPerson": "",
+    "contactPhone": ""
+  },
+  {
+    "bankName": "PHILLIES NORTON LT",
+    "name": "Phillies Burger House",
+    "storeId": "879528",
+    "status": "Active",
+    "contactPerson": "",
+    "contactPhone": ""
+  },
+  {
+    "bankName": "ARAYA SPICE LTD",
+    "name": "Chilli Masters",
+    "storeId": "1699",
+    "status": "Active",
+    "contactPerson": "",
+    "contactPhone": ""
+  },
+  {
+    "bankName": "pb08 foods Ltd",
+    "name": "Spice Lounge Indian Takeaway",
+    "storeId": "802373",
+    "status": "Active",
+    "contactPerson": "",
+    "contactPhone": ""
+  },
+  {
+    "bankName": "Prime BURRITO LIMI",
+    "name": "PrimeBurrito",
+    "storeId": "802090",
+    "status": "Active",
+    "contactPerson": "",
+    "contactPhone": ""
+  },
+  {
+    "bankName": "Dower M",
+    "name": "Mogsy Belle Ice Cream Parlour ebbw vale",
+    "storeId": "833743",
+    "status": "Active",
+    "contactPerson": "",
+    "contactPhone": ""
+  },
+  {
+    "bankName": "St6 Screen - TAZ FAST FOOD LIMI",
+    "name": "tiger bite tunstall",
+    "storeId": "872141",
+    "status": "Active",
+    "contactPerson": "",
+    "contactPhone": ""
+  },
+  {
+    "bankName": "SCREENS - PIZZA BASE C LTD",
+    "name": "pizza base",
+    "storeId": "2559",
+    "status": "Active",
+    "contactPerson": "",
+    "contactPhone": ""
+  },
+  {
+    "bankName": "Handsacre",
+    "name": "Aladdin\u2019s Handsacre",
+    "storeId": "886399",
+    "status": "Active",
+    "contactPerson": "",
+    "contactPhone": ""
+  },
+  {
+    "bankName": "JJ DESSERTS",
+    "name": "Mogsy Belle Ice Cream Parlour Merthy",
+    "storeId": "813456",
+    "status": "Active",
+    "contactPerson": "",
+    "contactPhone": ""
+  },
+  {
+    "bankName": "CHEEKY CHICKEN 1 LTD",
+    "name": "Cheeky Chicken",
+    "storeId": "803653",
+    "status": "Active",
+    "contactPerson": "",
+    "contactPhone": ""
+  },
+  {
+    "bankName": "NEXTSKY LIMITED",
+    "name": "Drizzle treats",
+    "storeId": "881219",
+    "status": "Active",
+    "contactPerson": "",
+    "contactPhone": ""
+  },
+  {
+    "bankName": "Sizzlers glen / SIZZLERS",
+    "name": "Sizzlers Glenrothes",
+    "storeId": "5898",
+    "status": "Active",
+    "contactPerson": "",
+    "contactPhone": ""
+  },
+  {
+    "bankName": "moonlight grill / MG CAMBS LTD",
+    "name": "Moonlight Grill",
+    "storeId": "6280",
+    "status": "Active",
+    "contactPerson": "",
+    "contactPhone": ""
+  },
+  {
+    "bankName": "KARDELEN GRILL LTD",
+    "name": "Posh Charcoal",
+    "storeId": "880179",
+    "status": "Active",
+    "contactPerson": "",
+    "contactPhone": ""
+  },
+  {
+    "bankName": "STAFFORD FASTFOOD LTD",
+    "name": "tiger bite stafford",
+    "storeId": "867786",
+    "status": "Active",
+    "contactPerson": "",
+    "contactPhone": ""
+  },
+  {
+    "bankName": "Flavoureat LTD",
+    "name": "Flavoureat",
+    "storeId": "886190",
+    "status": "Active",
+    "contactPerson": "",
+    "contactPhone": ""
+  },
+  {
+    "bankName": "P ABUBAKAR",
+    "name": "Linos grill",
+    "storeId": "6514",
+    "status": "Active",
+    "contactPerson": "",
+    "contactPhone": ""
+  },
+  {
+    "bankName": "N C CHICKEN & SAND - PAST CHICKEN LIMITED",
+    "name": "Hen House Chicken",
+    "storeId": "812814",
+    "status": "Active",
+    "contactPerson": "",
+    "contactPhone": ""
+  },
+  {
+    "bankName": "TD DINOS LTD / DIGI UK SOLUTIONS",
+    "name": "Dinos bangor",
+    "storeId": "878836",
+    "status": "Active",
+    "contactPerson": "",
+    "contactPhone": ""
+  },
+  {
+    "bankName": "ALAMDAR S",
+    "name": "Joys",
+    "storeId": "815530",
+    "status": "Active",
+    "contactPerson": "",
+    "contactPhone": ""
+  },
+  {
+    "bankName": "M Gilgil + SUSKUN LTD",
+    "name": "Top Kapi worksop",
+    "storeId": "798466",
+    "status": "Active",
+    "contactPerson": "",
+    "contactPhone": ""
+  },
+  {
+    "bankName": "CACTUSPIZZA LTD",
+    "name": "Cactus Pizzeria",
+    "storeId": "797419",
+    "status": "Active",
+    "contactPerson": "",
+    "contactPhone": ""
+  },
+  {
+    "bankName": "GOGOZ BUCKNALL LIMITED",
+    "name": "Gogoz",
+    "storeId": "838304",
+    "status": "Active",
+    "contactPerson": "",
+    "contactPhone": ""
+  },
+  {
+    "bankName": "Digital Screens Ma - MWA FOOD SERVICES",
+    "name": "aladdins kits green",
+    "storeId": "883097",
+    "status": "Active",
+    "contactPerson": "",
+    "contactPhone": ""
+  },
+  {
+    "bankName": "Sent from Revolut - MOHAMMED BASHIR",
+    "name": "TOKiES Pontefract",
+    "storeId": "825602",
+    "status": "Active",
+    "contactPerson": "",
+    "contactPhone": ""
+  },
+  {
+    "bankName": "CAFE DELIGHTS ROSS",
+    "name": "cafe delight",
+    "storeId": "886454",
+    "status": "Active",
+    "contactPerson": "",
+    "contactPhone": ""
+  },
+  {
+    "bankName": "WE TAKEAWAY LTD",
+    "name": "Eastern Delight Holbeach",
+    "storeId": "800855",
+    "status": "Active",
+    "contactPerson": "",
+    "contactPhone": ""
+  },
+  {
+    "bankName": "HYUSEIN A",
+    "name": "Best kebab",
+    "storeId": "794252",
+    "status": "Active",
+    "contactPerson": "",
+    "contactPhone": ""
+  },
+  {
+    "bankName": "BOZKAYA LTD T/A HA - HARUNS KEBAB",
+    "name": "Haruns Charcoal Grill",
+    "storeId": "6267",
+    "status": "Active",
+    "contactPerson": "",
+    "contactPhone": ""
+  },
+  {
+    "bankName": "THE KHYBER",
+    "name": "Napolena idle",
+    "storeId": "7361",
+    "status": "Active",
+    "contactPerson": "",
+    "contactPhone": ""
+  },
+  {
+    "bankName": "Picasso Aspull Limited  - CRAFTEDSLICE LTD",
+    "name": "Picasso Aspull",
+    "storeId": "8269",
+    "status": "Active",
+    "contactPerson": "",
+    "contactPhone": ""
+  },
+  {
+    "bankName": "NASIR JA",
+    "name": "Sowerby Delight",
+    "storeId": "867023",
+    "status": "Active",
+    "contactPerson": "",
+    "contactPhone": ""
+  },
+  {
+    "bankName": "E KORKMAZ",
+    "name": "Enzo's Takeaway",
+    "storeId": "797852",
+    "status": "Active",
+    "contactPerson": "",
+    "contactPhone": ""
+  },
+  {
+    "bankName": "WINDERMERE21 LTD",
+    "name": "Ohannes Windermere",
+    "storeId": "883425",
+    "status": "Active",
+    "contactPerson": "",
+    "contactPhone": ""
+  },
+  {
+    "bankName": "AHMED F",
+    "name": "March Tandoori",
+    "storeId": "6432",
+    "status": "Active",
+    "contactPerson": "",
+    "contactPhone": ""
+  },
+  {
+    "bankName": "AHMED F",
+    "name": "March Desserts",
+    "storeId": "802007",
+    "status": "Active",
+    "contactPerson": "",
+    "contactPhone": ""
+  },
+  {
+    "bankName": "ALI VEL TAKE LTD",
+    "name": "Ali vels",
+    "storeId": "798892",
+    "status": "Active",
+    "contactPerson": "",
+    "contactPhone": ""
+  },
+  {
+    "bankName": "FOOD MATHS LTD",
+    "name": "Ohannes Burger Leicester",
+    "storeId": "880129",
+    "status": "Active",
+    "contactPerson": "",
+    "contactPhone": ""
+  },
+  {
+    "bankName": "STANDISH PIZZA BAR",
+    "name": "Three guys Standish",
+    "storeId": "837269",
+    "status": "Active",
+    "contactPerson": "",
+    "contactPhone": ""
+  },
+  {
+    "bankName": "ASHFAQ AND SONS FO",
+    "name": "LOCHSIDE GRILLHUB",
+    "storeId": "884904",
+    "status": "Active",
+    "contactPerson": "",
+    "contactPhone": ""
+  },
+  {
+    "bankName": "HERNEBAY CHICKEN A - HAWAH KENT LTD",
+    "name": "Hernebay Chicken And Pizza",
+    "storeId": "873798",
+    "status": "Active",
+    "contactPerson": "",
+    "contactPhone": ""
+  },
+  {
+    "bankName": "PAYMENT / FLAMES - FLA TA AW B LTD",
+    "name": "Flames Burton",
+    "storeId": "4993",
+    "status": "Active",
+    "contactPerson": "",
+    "contactPhone": ""
+  },
+  {
+    "bankName": "Queens Berry",
+    "name": "Ice Cream Palace",
+    "storeId": "803104",
+    "status": "Active",
+    "contactPerson": "",
+    "contactPhone": ""
+  },
+  {
+    "bankName": "nan",
+    "name": "tiger bite blackburn",
+    "storeId": "879696",
+    "status": "Active",
+    "contactPerson": "",
+    "contactPhone": ""
+  },
+  {
+    "bankName": "nan",
+    "name": "Dario's Pizza",
+    "storeId": "805787",
+    "status": "Active",
+    "contactPerson": "",
+    "contactPhone": ""
+  },
+  {
+    "bankName": "nan",
+    "name": "Dixy Chicken Basingstoke",
+    "storeId": "883390",
+    "status": "Active",
+    "contactPerson": "",
+    "contactPhone": ""
+  },
+  {
+    "bankName": "nan",
+    "name": "dixy new milton",
+    "storeId": "881108",
+    "status": "Active",
+    "contactPerson": "",
+    "contactPhone": ""
+  },
+  {
+    "bankName": "nan",
+    "name": "Ohannes nottingham",
+    "storeId": "881046",
+    "status": "Active",
+    "contactPerson": "",
+    "contactPhone": ""
+  },
+  {
+    "bankName": "nan",
+    "name": "Rupeyal Express - ST6 5EP",
+    "storeId": "192",
+    "status": "Active",
+    "contactPerson": "",
+    "contactPhone": ""
+  },
+  {
+    "bankName": "nan",
+    "name": "Saffrron Express",
+    "storeId": "881852",
+    "status": "Active",
+    "contactPerson": "",
+    "contactPhone": ""
+  },
+  {
+    "bankName": "nan",
+    "name": "Tiger Bite Crewe",
+    "storeId": "853583",
+    "status": "Active",
+    "contactPerson": "",
+    "contactPhone": ""
+  },
+  {
+    "bankName": "nan",
+    "name": "tiger bite kidsgrove",
+    "storeId": "866697",
+    "status": "Active",
+    "contactPerson": "",
+    "contactPhone": ""
+  },
+  {
+    "bankName": "nan",
+    "name": "Tigerbite burton",
+    "storeId": "876465",
+    "status": "Active",
+    "contactPerson": "",
+    "contactPhone": ""
+  },
+  {
+    "bankName": "nan",
+    "name": "Tigerbite Meir",
+    "storeId": "872640",
+    "status": "Active",
+    "contactPerson": "",
+    "contactPhone": ""
+  },
+  {
+    "bankName": "nan",
+    "name": "Wings Corner",
+    "storeId": "875816",
+    "status": "Active",
+    "contactPerson": "",
+    "contactPhone": ""
+  },
+  {
+    "bankName": "nan",
+    "name": "aladdins pizza cannock",
+    "storeId": "877415",
+    "status": "Active",
+    "contactPerson": "",
+    "contactPhone": ""
+  },
+  {
+    "bankName": "nan",
+    "name": "Guner'o",
+    "storeId": "815076",
+    "status": "pending",
+    "contactPerson": "",
+    "contactPhone": ""
+  },
+  {
+    "bankName": "nan",
+    "name": "Sprinkles",
+    "storeId": "873928",
+    "status": "pending",
+    "contactPerson": "",
+    "contactPhone": ""
+  },
+  {
+    "bankName": "nan",
+    "name": "Original India",
+    "storeId": "803384",
+    "status": "pending",
+    "contactPerson": "",
+    "contactPhone": ""
+  },
+  {
+    "bankName": "nan",
+    "name": "Pizzeria NG19",
+    "storeId": "1811",
+    "status": "pending",
+    "contactPerson": "",
+    "contactPhone": ""
+  },
+  {
+    "bankName": "The Greek Station",
+    "name": "The Greek Station",
+    "storeId": "886414",
+    "status": "Active",
+    "contactPerson": "",
+    "contactPhone": ""
+  },
+  {
+    "bankName": "BUSY BOSS LTD",
+    "name": "Busy boss",
+    "storeId": "878103",
+    "status": "Active",
+    "contactPerson": "",
+    "contactPhone": ""
+  }
+]

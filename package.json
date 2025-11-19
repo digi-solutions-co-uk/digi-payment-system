@@ -6,7 +6,11 @@
   "scripts": {
     "dev": "cd frontend && npm run dev",
     "build": "cd frontend && npm run build",
-    "preview": "cd frontend && npm run preview"
+    "preview": "cd frontend && npm run preview",
+    "import-customers": "node scripts/import-customers.js"
+  },
+  "devDependencies": {
+    "firebase-admin": "^13.0.0"
   }
 }
 

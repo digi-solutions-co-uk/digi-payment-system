@@ -7,18 +7,20 @@ The project is configured for automatic deployment to GitHub Pages using GitHub 
 ### Setup Steps
 
 1. **Enable GitHub Pages in Repository Settings**
-   - Go to your repository: `https://github.com/digi-solutions-co-uk/didi-payment-system`
+
+   - Go to your repository: `https://github.com/digi-solutions-co-uk/digi-payment-system`
    - Navigate to **Settings** → **Pages**
    - Under **Source**, select **GitHub Actions**
    - Save the settings
 
 2. **The deployment will automatically trigger when:**
+
    - You push to the `main` branch
    - You manually trigger it from the Actions tab
 
 3. **Access your deployed application:**
    - After deployment completes, your app will be available at:
-   - `https://digi-solutions-co-uk.github.io/didi-payment-system/`
+   - `https://digi-solutions-co-uk.github.io/digi-payment-system/`
 
 ## Manual Deployment
 
@@ -46,7 +48,8 @@ npm run build
 
 ### Base Path
 
-The application is configured with base path `/didi-payment-system/` for GitHub Pages. If you change the repository name, update:
+The application is configured with base path `/digi-payment-system/` for GitHub Pages. If you change the repository name, update:
+
 - `frontend/vite.config.js` - `base` property
 - `.github/workflows/deploy.yml` - if needed
 
@@ -61,15 +64,18 @@ For production, you may want to use environment variables for Firebase config:
 ## Troubleshooting
 
 ### Build Fails
+
 - Check GitHub Actions logs in the repository's Actions tab
 - Ensure all dependencies are listed in `package.json`
 - Verify Node.js version compatibility
 
 ### Routes Not Working
+
 - Ensure React Router is configured with the correct base path
 - Check that all routes use relative paths
 
 ### Firebase Errors
+
 - Verify Firebase configuration is correct
 - Check Firestore security rules allow public read (if needed)
 - Ensure Firebase project is set up correctly
@@ -77,7 +83,7 @@ For production, you may want to use environment variables for Firebase config:
 ## Deployment Status
 
 Check deployment status:
+
 - Go to **Actions** tab in GitHub
 - View the latest workflow run
 - Check for any errors or warnings
-
