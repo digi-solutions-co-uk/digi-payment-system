@@ -136,6 +136,23 @@
   letter-spacing: 0.5px;
 }
 
+.customers-table th.sortable {
+  cursor: pointer;
+  user-select: none;
+  position: relative;
+  transition: background-color 0.2s;
+}
+
+.customers-table th.sortable:hover {
+  background-color: #f3f4f6;
+}
+
+.customers-table th.sortable .sort-indicator {
+  color: #3b82f6;
+  font-weight: 700;
+  margin-left: 4px;
+}
+
 .customers-table td {
   padding: 16px 12px;
   border-top: 1px solid #e5e7eb;

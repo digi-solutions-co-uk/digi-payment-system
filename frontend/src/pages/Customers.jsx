@@ -6,6 +6,7 @@ import {
   addDoc,
   updateDoc,
   doc,
+  getDoc,
   query,
   where,
   writeBatch,
@@ -23,6 +24,9 @@ import "./Customers.css";
 export function Customers() {
   const [customers, setCustomers] = useState([]);
   const [filteredCustomers, setFilteredCustomers] = useState([]);
+  const [subscriptionPrices, setSubscriptionPrices] = useState({});
+  const [nextBillingDates, setNextBillingDates] = useState({});
+  const [lastPaymentDates, setLastPaymentDates] = useState({});
   const [loading, setLoading] = useState(true);
   const [modalOpen, setModalOpen] = useState(false);
   const [editingCustomer, setEditingCustomer] = useState(null);
@@ -38,7 +42,16 @@ export function Customers() {
     status: "ACTIVE",
   });
   const [statusFilter, setStatusFilter] = useState("ALL");
+  const [sortColumn, setSortColumn] = useState(null);
+  const [sortDirection, setSortDirection] = useState("asc");
   const navigate = useNavigate();
+
+  const formatCurrency = (amount) => {
+    return new Intl.NumberFormat("en-US", {
+      style: "currency",
+      currency: "USD",
+    }).format(amount || 0);
+  };
 
   useEffect(() => {
     loadCustomers();
@@ -53,11 +66,328 @@ export function Customers() {
       });
       setCustomers(customersList);
       setFilteredCustomers(customersList);
+
+      // Load subscription prices, next billing dates, and last payment dates for all customers
+      await Promise.all([
+        loadSubscriptionPrices(customersList),
+        loadNextBillingDates(customersList),
+        loadLastPaymentDates(customersList),
+      ]);
     } catch (error) {
       console.error("Error loading customers:", error);
     } finally {
       setLoading(false);
     }
+  };
+
+  const loadSubscriptionPrices = async (customersList) => {
+    try {
+      const pricesMap = {};
+
+      // Get all subscriptions
+      const subscriptionsSnapshot = await getDocs(
+        collection(db, "subscriptions")
+      );
+      const subscriptions = [];
+      const planIds = new Set();
+
+      subscriptionsSnapshot.forEach((doc) => {
+        const data = doc.data();
+        subscriptions.push({ id: doc.id, ...data });
+        if (data.planId?.id) {
+          planIds.add(data.planId.id);
+        }
+      });
+
+      // Load all plan details
+      const plansMap = {};
+      for (const planId of planIds) {
+        try {
+          const planDoc = await getDoc(doc(db, "plans", planId));
+          if (planDoc.exists()) {
+            plansMap[planId] = planDoc.data();
+          }
+        } catch (error) {
+          console.error(`Error loading plan ${planId}:`, error);
+        }
+      }
+
+      // Calculate price for each customer
+      for (const customer of customersList) {
+        // Find active subscriptions for this customer
+        // Handle DocumentReference format (customerId.id or customerId.path)
+        const customerSubscriptions = subscriptions.filter((sub) => {
+          let subCustomerId = null;
+          if (sub.customerId) {
+            // Handle DocumentReference
+            if (sub.customerId.id) {
+              subCustomerId = sub.customerId.id;
+            } else if (sub.customerId.path) {
+              // Extract ID from path like "customers/abc123"
+              const pathParts = sub.customerId.path.split("/");
+              subCustomerId = pathParts[pathParts.length - 1];
+            }
+          }
+          return (
+            subCustomerId === customer.id &&
+            (sub.status === "ACTIVE" || sub.status === "TRIAL")
+          );
+        });
+
+        if (customerSubscriptions.length === 0) {
+          pricesMap[customer.id] = null;
+          continue;
+        }
+
+        // Calculate total price (sum of all active subscriptions)
+        let totalPrice = 0;
+        for (const sub of customerSubscriptions) {
+          if (sub.customPrice !== null && sub.customPrice !== undefined) {
+            totalPrice += sub.customPrice;
+          } else if (sub.planId?.id && plansMap[sub.planId.id]) {
+            totalPrice += plansMap[sub.planId.id].basePrice || 0;
+          }
+        }
+
+        pricesMap[customer.id] = totalPrice > 0 ? totalPrice : null;
+      }
+
+      setSubscriptionPrices(pricesMap);
+    } catch (error) {
+      console.error("Error loading subscription prices:", error);
+    }
+  };
+
+  const loadNextBillingDates = async (customersList) => {
+    try {
+      const datesMap = {};
+
+      // Get all subscriptions
+      const subscriptionsSnapshot = await getDocs(
+        collection(db, "subscriptions")
+      );
+      const subscriptions = [];
+
+      subscriptionsSnapshot.forEach((doc) => {
+        const data = doc.data();
+        subscriptions.push({ id: doc.id, ...data });
+      });
+
+      // Find next billing date for each customer (earliest date from active subscriptions)
+      for (const customer of customersList) {
+        const customerSubscriptions = subscriptions.filter((sub) => {
+          let subCustomerId = null;
+          if (sub.customerId) {
+            if (sub.customerId.id) {
+              subCustomerId = sub.customerId.id;
+            } else if (sub.customerId.path) {
+              const pathParts = sub.customerId.path.split("/");
+              subCustomerId = pathParts[pathParts.length - 1];
+            }
+          }
+          return (
+            subCustomerId === customer.id &&
+            (sub.status === "ACTIVE" || sub.status === "TRIAL") &&
+            sub.nextBillingDate
+          );
+        });
+
+        if (customerSubscriptions.length === 0) {
+          datesMap[customer.id] = null;
+          continue;
+        }
+
+        // Find the earliest next billing date
+        const billingDates = customerSubscriptions
+          .map((sub) => sub.nextBillingDate?.toDate())
+          .filter((date) => date instanceof Date)
+          .sort((a, b) => a - b);
+
+        datesMap[customer.id] =
+          billingDates.length > 0 ? billingDates[0] : null;
+      }
+
+      setNextBillingDates(datesMap);
+    } catch (error) {
+      console.error("Error loading next billing dates:", error);
+    }
+  };
+
+  const loadLastPaymentDates = async (customersList) => {
+    try {
+      const datesMap = {};
+
+      // Get all invoices
+      const invoicesSnapshot = await getDocs(collection(db, "invoices"));
+      const invoices = [];
+      const customerInvoiceMap = {};
+
+      invoicesSnapshot.forEach((doc) => {
+        const data = doc.data();
+        invoices.push({ id: doc.id, ...data });
+
+        // Map invoices to customers
+        let customerId = null;
+        if (data.customerId) {
+          if (data.customerId.id) {
+            customerId = data.customerId.id;
+          } else if (data.customerId.path) {
+            const pathParts = data.customerId.path.split("/");
+            customerId = pathParts[pathParts.length - 1];
+          }
+        }
+
+        if (customerId) {
+          if (!customerInvoiceMap[customerId]) {
+            customerInvoiceMap[customerId] = [];
+          }
+          customerInvoiceMap[customerId].push(doc.id);
+        }
+      });
+
+      // Get all payments
+      const paymentsSnapshot = await getDocs(collection(db, "payments"));
+      const payments = [];
+      const invoicePaymentMap = {};
+
+      paymentsSnapshot.forEach((doc) => {
+        const data = doc.data();
+        payments.push({ id: doc.id, ...data });
+
+        // Map payments to invoices
+        let invoiceId = null;
+        if (data.invoiceId) {
+          if (data.invoiceId.id) {
+            invoiceId = data.invoiceId.id;
+          } else if (data.invoiceId.path) {
+            const pathParts = data.invoiceId.path.split("/");
+            invoiceId = pathParts[pathParts.length - 1];
+          }
+        }
+
+        if (invoiceId) {
+          if (!invoicePaymentMap[invoiceId]) {
+            invoicePaymentMap[invoiceId] = [];
+          }
+          invoicePaymentMap[invoiceId].push({
+            date: data.paymentDate?.toDate(),
+            amount: data.amountPaid,
+          });
+        }
+      });
+
+      // Find last payment date for each customer
+      for (const customer of customersList) {
+        const customerInvoiceIds = customerInvoiceMap[customer.id] || [];
+        const allPaymentDates = [];
+
+        for (const invoiceId of customerInvoiceIds) {
+          const invoicePayments = invoicePaymentMap[invoiceId] || [];
+          invoicePayments.forEach((payment) => {
+            if (payment.date instanceof Date) {
+              allPaymentDates.push(payment.date);
+            }
+          });
+        }
+
+        if (allPaymentDates.length === 0) {
+          datesMap[customer.id] = null;
+          continue;
+        }
+
+        // Find the most recent payment date
+        const lastPaymentDate = allPaymentDates.sort((a, b) => b - a)[0];
+        datesMap[customer.id] = lastPaymentDate;
+      }
+
+      setLastPaymentDates(datesMap);
+    } catch (error) {
+      console.error("Error loading last payment dates:", error);
+    }
+  };
+
+  const formatDate = (date) => {
+    if (!date) return "N/A";
+    if (!(date instanceof Date)) return "N/A";
+    return new Intl.DateTimeFormat("en-US", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+    }).format(date);
+  };
+
+  const handleSort = (column) => {
+    if (sortColumn === column) {
+      // Toggle direction if clicking the same column
+      setSortDirection(sortDirection === "asc" ? "desc" : "asc");
+    } else {
+      // Set new column and default to ascending
+      setSortColumn(column);
+      setSortDirection("asc");
+    }
+    setCurrentPage(1);
+  };
+
+  const sortCustomers = (customersToSort) => {
+    if (!sortColumn) return customersToSort;
+
+    return [...customersToSort].sort((a, b) => {
+      let aValue, bValue;
+
+      switch (sortColumn) {
+        case "name":
+          aValue = (a.name || "").toLowerCase();
+          bValue = (b.name || "").toLowerCase();
+          break;
+        case "storeId":
+          aValue = (a.storeId || "").toLowerCase();
+          bValue = (b.storeId || "").toLowerCase();
+          break;
+        case "status":
+          aValue = (a.status || "ACTIVE").toLowerCase();
+          bValue = (b.status || "ACTIVE").toLowerCase();
+          break;
+        case "subscriptionPrice":
+          aValue = subscriptionPrices[a.id] ?? -1;
+          bValue = subscriptionPrices[b.id] ?? -1;
+          break;
+        case "bankName":
+          aValue = (a.bankName || "").toLowerCase();
+          bValue = (b.bankName || "").toLowerCase();
+          break;
+        case "nextBillingDate":
+          aValue = nextBillingDates[a.id];
+          bValue = nextBillingDates[b.id];
+          // Handle null dates - put them at the end
+          if (!aValue && !bValue) return 0;
+          if (!aValue) return 1;
+          if (!bValue) return -1;
+          aValue = aValue.getTime();
+          bValue = bValue.getTime();
+          break;
+        case "lastPaymentDate":
+          aValue = lastPaymentDates[a.id];
+          bValue = lastPaymentDates[b.id];
+          // Handle null dates - put them at the end
+          if (!aValue && !bValue) return 0;
+          if (!aValue) return 1;
+          if (!bValue) return -1;
+          aValue = aValue.getTime();
+          bValue = bValue.getTime();
+          break;
+        default:
+          return 0;
+      }
+
+      // Handle null/undefined values
+      if (aValue === null || aValue === undefined) aValue = "";
+      if (bValue === null || bValue === undefined) bValue = "";
+
+      // Compare values
+      if (aValue < bValue) return sortDirection === "asc" ? -1 : 1;
+      if (aValue > bValue) return sortDirection === "asc" ? 1 : -1;
+      return 0;
+    });
   };
 
   useEffect(() => {
@@ -68,14 +398,10 @@ export function Customers() {
       filtered = filtered.filter(
         (customer) =>
           customer.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          (customer.contactPerson &&
-            customer.contactPerson
+          (customer.storeId &&
+            customer.storeId
               .toLowerCase()
               .includes(searchTerm.toLowerCase())) ||
-          (customer.contactPhone &&
-            customer.contactPhone.includes(searchTerm)) ||
-          (customer.storeId &&
-            customer.storeId.toLowerCase().includes(searchTerm.toLowerCase())) ||
           (customer.bankName &&
             customer.bankName.toLowerCase().includes(searchTerm.toLowerCase()))
       );
@@ -88,9 +414,20 @@ export function Customers() {
       );
     }
 
-    setFilteredCustomers(filtered);
+    // Apply sorting
+    const sorted = sortCustomers(filtered);
+    setFilteredCustomers(sorted);
     setCurrentPage(1);
-  }, [searchTerm, statusFilter, customers]);
+  }, [
+    searchTerm,
+    statusFilter,
+    customers,
+    sortColumn,
+    sortDirection,
+    subscriptionPrices,
+    nextBillingDates,
+    lastPaymentDates,
+  ]);
 
   const handleEditCustomer = (customer) => {
     setEditingCustomer(customer);
@@ -224,16 +561,24 @@ export function Customers() {
       "Name",
       "Store ID",
       "Status",
-      "Contact Person",
-      "Contact Phone",
+      "Subscription Price",
+      "Next Billing Date",
+      "Last Payment Date",
       "Bank Name",
     ];
     const rows = filteredCustomers.map((customer) => [
       customer.name,
       customer.storeId || "",
       customer.status || "ACTIVE",
-      customer.contactPerson || "",
-      customer.contactPhone || "",
+      subscriptionPrices[customer.id]
+        ? formatCurrency(subscriptionPrices[customer.id])
+        : "No subscription",
+      nextBillingDates[customer.id]
+        ? formatDate(nextBillingDates[customer.id])
+        : "N/A",
+      lastPaymentDates[customer.id]
+        ? formatDate(lastPaymentDates[customer.id])
+        : "N/A",
       customer.bankName || "",
     ]);
 
@@ -376,18 +721,84 @@ export function Customers() {
             <table className="customers-table">
               <thead>
                 <tr>
-                  <th>Name</th>
-                  <th>Store ID</th>
-                  <th>Status</th>
-                  <th>Bank Name</th>
-                  <th>Contact Person</th>
-                  <th>Contact Phone</th>
+                  <th className="sortable" onClick={() => handleSort("name")}>
+                    Name
+                    {sortColumn === "name" && (
+                      <span className="sort-indicator">
+                        {sortDirection === "asc" ? " ↑" : " ↓"}
+                      </span>
+                    )}
+                  </th>
+                  <th
+                    className="sortable"
+                    onClick={() => handleSort("storeId")}
+                  >
+                    Store ID
+                    {sortColumn === "storeId" && (
+                      <span className="sort-indicator">
+                        {sortDirection === "asc" ? " ↑" : " ↓"}
+                      </span>
+                    )}
+                  </th>
+                  <th className="sortable" onClick={() => handleSort("status")}>
+                    Status
+                    {sortColumn === "status" && (
+                      <span className="sort-indicator">
+                        {sortDirection === "asc" ? " ↑" : " ↓"}
+                      </span>
+                    )}
+                  </th>
+                  <th
+                    className="sortable"
+                    onClick={() => handleSort("subscriptionPrice")}
+                  >
+                    Subscription Price
+                    {sortColumn === "subscriptionPrice" && (
+                      <span className="sort-indicator">
+                        {sortDirection === "asc" ? " ↑" : " ↓"}
+                      </span>
+                    )}
+                  </th>
+                  <th
+                    className="sortable"
+                    onClick={() => handleSort("nextBillingDate")}
+                  >
+                    Next Billing Date
+                    {sortColumn === "nextBillingDate" && (
+                      <span className="sort-indicator">
+                        {sortDirection === "asc" ? " ↑" : " ↓"}
+                      </span>
+                    )}
+                  </th>
+                  <th
+                    className="sortable"
+                    onClick={() => handleSort("lastPaymentDate")}
+                  >
+                    Last Payment Date
+                    {sortColumn === "lastPaymentDate" && (
+                      <span className="sort-indicator">
+                        {sortDirection === "asc" ? " ↑" : " ↓"}
+                      </span>
+                    )}
+                  </th>
+                  <th
+                    className="sortable"
+                    onClick={() => handleSort("bankName")}
+                  >
+                    Bank Name
+                    {sortColumn === "bankName" && (
+                      <span className="sort-indicator">
+                        {sortDirection === "asc" ? " ↑" : " ↓"}
+                      </span>
+                    )}
+                  </th>
                   <th>Actions</th>
                 </tr>
               </thead>
               <tbody>
                 {paginatedCustomers.map((customer) => {
                   const customerStatus = customer.status || "ACTIVE";
+                  const subscriptionPrice = subscriptionPrices[customer.id];
                   return (
                     <tr key={customer.id}>
                       <td>{customer.name}</td>
@@ -399,9 +810,29 @@ export function Customers() {
                           {customerStatus}
                         </span>
                       </td>
+                      <td>
+                        {subscriptionPrice !== null &&
+                        subscriptionPrice !== undefined ? (
+                          formatCurrency(subscriptionPrice)
+                        ) : (
+                          <span style={{ color: "#999" }}>No subscription</span>
+                        )}
+                      </td>
+                      <td>
+                        {nextBillingDates[customer.id] ? (
+                          formatDate(nextBillingDates[customer.id])
+                        ) : (
+                          <span style={{ color: "#999" }}>N/A</span>
+                        )}
+                      </td>
+                      <td>
+                        {lastPaymentDates[customer.id] ? (
+                          formatDate(lastPaymentDates[customer.id])
+                        ) : (
+                          <span style={{ color: "#999" }}>N/A</span>
+                        )}
+                      </td>
                       <td>{customer.bankName || "N/A"}</td>
-                      <td>{customer.contactPerson || "N/A"}</td>
-                      <td>{customer.contactPhone || "N/A"}</td>
                       <td>
                         <div className="action-buttons">
                           <button
