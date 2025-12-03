@@ -99,18 +99,20 @@ export function Customers() {
         }
       });
 
-      // Load all plan details
+      // Load all plan details (in parallel for better performance)
       const plansMap = {};
-      for (const planId of planIds) {
-        try {
-          const planDoc = await getDoc(doc(db, "plans", planId));
-          if (planDoc.exists()) {
-            plansMap[planId] = planDoc.data();
+      await Promise.all(
+        Array.from(planIds).map(async (planId) => {
+          try {
+            const planDoc = await getDoc(doc(db, "plans", planId));
+            if (planDoc.exists()) {
+              plansMap[planId] = planDoc.data();
+            }
+          } catch (error) {
+            console.error(`Error loading plan ${planId}:`, error);
           }
-        } catch (error) {
-          console.error(`Error loading plan ${planId}:`, error);
-        }
-      }
+        })
+      );
 
       // Calculate price for each customer
       for (const customer of customersList) {

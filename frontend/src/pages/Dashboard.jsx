@@ -134,7 +134,9 @@ export function Dashboard() {
       const names = {};
       const banks = {};
       const validCustomerIds = new Set();
-      for (const customerId of customerIds) {
+
+      // Load all needed customers in parallel for better performance
+      const customerPromises = Array.from(customerIds).map(async (customerId) => {
         try {
           const customerDoc = await getDoc(doc(db, 'customers', customerId));
           if (customerDoc.exists()) {
@@ -146,7 +148,9 @@ export function Dashboard() {
         } catch (error) {
           console.error(`Error loading customer ${customerId}:`, error);
         }
-      }
+      });
+
+      await Promise.all(customerPromises);
       setCustomerNames(names);
       setCustomerBanks(banks);
 
