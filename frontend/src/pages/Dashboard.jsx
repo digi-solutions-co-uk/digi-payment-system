@@ -15,6 +15,7 @@ export function Dashboard() {
   const [allUnpaidInvoices, setAllUnpaidInvoices] = useState([]);
   const [trialsEnding, setTrialsEnding] = useState([]);
   const [customerNames, setCustomerNames] = useState({});
+  const [customerBanks, setCustomerBanks] = useState({});
   const [kpis, setKpis] = useState({
     overdueAmount: 0,
     dueTodayAmount: 0,
@@ -131,12 +132,15 @@ export function Dashboard() {
       });
       
       const names = {};
+      const banks = {};
       const validCustomerIds = new Set();
       for (const customerId of customerIds) {
         try {
           const customerDoc = await getDoc(doc(db, 'customers', customerId));
           if (customerDoc.exists()) {
-            names[customerId] = customerDoc.data().name;
+            const customerData = customerDoc.data();
+            names[customerId] = customerData.name;
+            banks[customerId] = customerData.bankName || '';
             validCustomerIds.add(customerId);
           }
         } catch (error) {
@@ -144,6 +148,7 @@ export function Dashboard() {
         }
       }
       setCustomerNames(names);
+      setCustomerBanks(banks);
 
       // Filter out invoices for deleted customers
       const validOverdue = overdue.filter(inv => {
@@ -315,7 +320,12 @@ export function Dashboard() {
 
       <div className="dashboard-section">
         <h2>Overdue Invoices</h2>
-        <InvoiceTable invoices={overdueInvoices} customerNames={customerNames} onRecordPayment={handleRecordPayment} />
+        <InvoiceTable
+          invoices={overdueInvoices}
+          customerNames={customerNames}
+          customerBanks={customerBanks}
+          onRecordPayment={handleRecordPayment}
+        />
       </div>
 
       <div className="dashboard-section">
@@ -323,7 +333,12 @@ export function Dashboard() {
         {dueTodayInvoices.length === 0 ? (
           <p className="empty-state">No invoices due today</p>
         ) : (
-          <InvoiceTable invoices={dueTodayInvoices} customerNames={customerNames} onRecordPayment={handleRecordPayment} />
+          <InvoiceTable
+            invoices={dueTodayInvoices}
+            customerNames={customerNames}
+            customerBanks={customerBanks}
+            onRecordPayment={handleRecordPayment}
+          />
         )}
       </div>
 
@@ -332,7 +347,12 @@ export function Dashboard() {
         {allUnpaidInvoices.length === 0 ? (
           <p className="empty-state">No unpaid invoices</p>
         ) : (
-          <InvoiceTable invoices={allUnpaidInvoices} customerNames={customerNames} onRecordPayment={handleRecordPayment} />
+          <InvoiceTable
+            invoices={allUnpaidInvoices}
+            customerNames={customerNames}
+            customerBanks={customerBanks}
+            onRecordPayment={handleRecordPayment}
+          />
         )}
       </div>
 
@@ -402,7 +422,7 @@ export function Dashboard() {
   );
 }
 
-function InvoiceTable({ invoices, customerNames, onRecordPayment }) {
+function InvoiceTable({ invoices, customerNames, customerBanks, onRecordPayment }) {
   const navigate = useNavigate();
   
   const formatCurrency = (amount) => {
@@ -437,6 +457,13 @@ function InvoiceTable({ invoices, customerNames, onRecordPayment }) {
     return customerNames[customerId] || customerId;
   };
 
+  const getCustomerBank = (invoice) => {
+    const customerId = invoice.customerId?.id || invoice.customerId?.path?.split('/').pop() || invoice.customerId;
+    if (!customerId) return 'N/A';
+    const bank = customerBanks[customerId];
+    return bank && bank.trim() !== '' ? bank : 'N/A';
+  };
+
   if (invoices.length === 0) {
     return <p className="empty-state">No invoices found</p>;
   }
@@ -446,6 +473,7 @@ function InvoiceTable({ invoices, customerNames, onRecordPayment }) {
       <thead>
         <tr>
           <th>Customer</th>
+          <th>Bank</th>
           <th>Amount</th>
           <th>Period</th>
           <th>Due Date</th>
@@ -477,6 +505,7 @@ function InvoiceTable({ invoices, customerNames, onRecordPayment }) {
                   'N/A'
                 )}
               </td>
+              <td>{getCustomerBank(invoice)}</td>
               <td>{formatCurrency(invoice.amount)}</td>
               <td>{periodDisplay}</td>
               <td>{formatDate(invoice.dueDate)}</td>
