@@ -6,17 +6,17 @@ admin.initializeApp();
 const db = admin.firestore();
 
 // Helper function to get next billing date
-// For weekly subscriptions: next billing date = period end date (the due date)
-// Example: Period 09/11/2025 - 16/11/2025, period ends on 16/11/2025 (due date)
-//          Next period: 17/11/2025 - 24/11/2025, period ends on 24/11/2025 (due date)
+// For weekly subscriptions: next billing date = period end date
+// Example: Period 09/11/2025 - 16/11/2025, period ends on 16/11/2025
+//          Next period: 17/11/2025 - 24/11/2025, period ends on 24/11/2025
 //          So next billing = period end date
+// Note: Invoice due date is set to period start (billing date), not period end
 // For monthly subscriptions: next billing is next month's billing day
 function getNextBillingDate(periodEndDate, billingCycle, billingDay) {
   const date = new Date(periodEndDate);
 
   if (billingCycle === "WEEKLY") {
     // For weekly subscriptions, the next billing date is simply the period end date
-    // The period end date IS the billing day (due date)
     // No calculation needed - just return the period end date
     return date;
   } else if (billingCycle === "MONTHLY") {
@@ -38,8 +38,9 @@ exports.generateInvoices = onSchedule(
     timeZone: "UTC",
   },
   async (event) => {
+    // Set to end of today (23:59:59.999) to include all subscriptions with nextBillingDate today
     const today = new Date();
-    today.setHours(0, 0, 0, 0);
+    today.setHours(23, 59, 59, 999);
 
     try {
       // Find subscriptions where nextBillingDate is today or in the past
@@ -215,7 +216,7 @@ exports.generateInvoices = onSchedule(
           subscriptionId: db.doc(`subscriptions/${subscriptionId}`),
           customerId: subscription.customerId,
           amount: amount,
-          dueDate: admin.firestore.Timestamp.fromDate(periodEnd),
+          dueDate: admin.firestore.Timestamp.fromDate(periodStart), // Due date is the billing date (period start)
           status: "UNPAID",
           isManual: false,
           periodStart: admin.firestore.Timestamp.fromDate(periodStart),
@@ -512,8 +513,9 @@ exports.testGenerateInvoices = onCall(
       throw new HttpsError("unauthenticated", "User must be authenticated");
     }
 
+    // Set to end of today (23:59:59.999) to include all subscriptions with nextBillingDate today
     const today = new Date();
-    today.setHours(0, 0, 0, 0);
+    today.setHours(23, 59, 59, 999);
 
     try {
       const subscriptionsSnapshot = await db
@@ -685,7 +687,7 @@ exports.testGenerateInvoices = onCall(
           subscriptionId: db.doc(`subscriptions/${subscriptionId}`),
           customerId: subscription.customerId,
           amount: amount,
-          dueDate: admin.firestore.Timestamp.fromDate(periodEnd),
+          dueDate: admin.firestore.Timestamp.fromDate(periodStart), // Due date is the billing date (period start)
           status: "UNPAID",
           isManual: false,
           periodStart: admin.firestore.Timestamp.fromDate(periodStart),
