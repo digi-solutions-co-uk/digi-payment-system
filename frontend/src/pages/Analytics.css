@@ -117,3 +117,204 @@
   color: #111827;
 }
 
+.analytics-section {
+  margin-top: 48px;
+}
+
+.clickable-card {
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.clickable-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.export-dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.export-dropdown-content {
+  display: none;
+  position: absolute;
+  right: 0;
+  background-color: white;
+  min-width: 220px;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+  border-radius: 6px;
+  overflow: hidden;
+  margin-top: 8px;
+}
+
+.export-dropdown-content {
+  display: none;
+}
+
+.export-dropdown-content.show {
+  display: block;
+}
+
+.export-option {
+  width: 100%;
+  padding: 12px 16px;
+  text-align: left;
+  border: none;
+  background: white;
+  color: #374151;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.export-option:hover {
+  background-color: #f3f4f6;
+}
+
+.export-option.export-full {
+  font-weight: 600;
+  color: #3b82f6;
+  border-top: 1px solid #e5e7eb;
+  margin-top: 4px;
+  padding-top: 12px;
+}
+
+.export-divider {
+  height: 1px;
+  background-color: #e5e7eb;
+  margin: 4px 0;
+}
+
+.weekly-report-container {
+  background: white;
+  padding: 24px;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.weekly-report-summary {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.weekly-report-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  background: #f9fafb;
+  border-radius: 6px;
+  border-left: 4px solid #6b7280;
+}
+
+.weekly-report-item.positive {
+  border-left-color: #10b981;
+  background: #f0fdf4;
+}
+
+.weekly-report-item.negative {
+  border-left-color: #ef4444;
+  background: #fef2f2;
+}
+
+.weekly-label {
+  font-size: 14px;
+  color: #374151;
+  font-weight: 500;
+}
+
+.weekly-value {
+  font-size: 16px;
+  font-weight: 600;
+  color: #111827;
+}
+
+.missed-payments-table-container {
+  margin-top: 32px;
+}
+
+.missed-payments-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+}
+
+.missed-payments-table thead {
+  background: #f9fafb;
+}
+
+.missed-payments-table th {
+  padding: 12px 16px;
+  text-align: left;
+  font-weight: 600;
+  font-size: 14px;
+  color: #374151;
+  border-bottom: 2px solid #e5e7eb;
+}
+
+.missed-payments-table td {
+  padding: 12px 16px;
+  font-size: 14px;
+  color: #111827;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.missed-payments-table tbody tr:hover {
+  background: #f9fafb;
+}
+
+.missed-payments-table tbody tr.no-first-payment {
+  background: #eff6ff;
+}
+
+.week-selector {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.week-nav-btn {
+  padding: 8px 16px;
+  background: #f3f4f6;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 14px;
+  color: #374151;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.week-nav-btn:hover {
+  background: #e5e7eb;
+  border-color: #9ca3af;
+}
+
+.week-current-btn {
+  padding: 8px 16px;
+  background: #3b82f6;
+  border: 1px solid #3b82f6;
+  border-radius: 6px;
+  font-size: 14px;
+  color: white;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.week-current-btn:hover {
+  background: #2563eb;
+  border-color: #2563eb;
+}
+
+.week-display {
+  font-size: 14px;
+  color: #111827;
+  font-weight: 500;
+  padding: 8px 12px;
+  background: #f9fafb;
+  border-radius: 6px;
+  white-space: nowrap;
+}
+

@@ -136,6 +136,7 @@ export function Dashboard() {
       const validCustomerIds = new Set();
 
       // Load all needed customers in parallel for better performance
+      const customerExcludeMap = {}; // Track which customers should be excluded from dashboard
       const customerPromises = Array.from(customerIds).map(async (customerId) => {
         try {
           const customerDoc = await getDoc(doc(db, 'customers', customerId));
@@ -143,6 +144,8 @@ export function Dashboard() {
             const customerData = customerDoc.data();
             names[customerId] = customerData.name;
             banks[customerId] = customerData.bankName || '';
+            // Track if customer should be excluded from dashboard
+            customerExcludeMap[customerId] = customerData.excludeFromDashboard || false;
             validCustomerIds.add(customerId);
           }
         } catch (error) {
@@ -154,18 +157,24 @@ export function Dashboard() {
       setCustomerNames(names);
       setCustomerBanks(banks);
 
-      // Filter out invoices for deleted customers
+      // Filter out invoices for deleted customers and customers excluded from dashboard
       const validOverdue = overdue.filter(inv => {
         const customerId = inv.customerId?.id || inv.customerId?.path?.split('/').pop() || inv.customerId;
-        return customerId && validCustomerIds.has(customerId);
+        if (!customerId || !validCustomerIds.has(customerId)) return false;
+        // Exclude invoices from customers with excludeFromDashboard flag
+        return !customerExcludeMap[customerId];
       });
       const validDueToday = dueToday.filter(inv => {
         const customerId = inv.customerId?.id || inv.customerId?.path?.split('/').pop() || inv.customerId;
-        return customerId && validCustomerIds.has(customerId);
+        if (!customerId || !validCustomerIds.has(customerId)) return false;
+        // Exclude invoices from customers with excludeFromDashboard flag
+        return !customerExcludeMap[customerId];
       });
       const validAllUnpaid = allUnpaid.filter(inv => {
         const customerId = inv.customerId?.id || inv.customerId?.path?.split('/').pop() || inv.customerId;
-        return customerId && validCustomerIds.has(customerId);
+        if (!customerId || !validCustomerIds.has(customerId)) return false;
+        // Exclude invoices from customers with excludeFromDashboard flag
+        return !customerExcludeMap[customerId];
       });
 
       setOverdueInvoices(validOverdue);

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import {
   collection,
   getDocs,
@@ -27,6 +27,9 @@ export function Customers() {
   const [subscriptionPrices, setSubscriptionPrices] = useState({});
   const [nextBillingDates, setNextBillingDates] = useState({});
   const [lastPaymentDates, setLastPaymentDates] = useState({});
+  const [customerBillingCycles, setCustomerBillingCycles] = useState({}); // Map customerId -> billing cycles
+  const [customerSubscriptionStatuses, setCustomerSubscriptionStatuses] =
+    useState({}); // Map customerId -> subscription statuses
   const [loading, setLoading] = useState(true);
   const [modalOpen, setModalOpen] = useState(false);
   const [editingCustomer, setEditingCustomer] = useState(null);
@@ -40,11 +43,17 @@ export function Customers() {
     storeId: "",
     bankName: "",
     status: "ACTIVE",
+    excludeFromDashboard: false,
   });
   const [statusFilter, setStatusFilter] = useState("ALL");
+  const [standingOrderFilter, setStandingOrderFilter] = useState("ALL");
+  const [billingCycleFilter, setBillingCycleFilter] = useState("ALL");
+  const [subscriptionStatusFilter, setSubscriptionStatusFilter] =
+    useState("ALL");
   const [sortColumn, setSortColumn] = useState(null);
   const [sortDirection, setSortDirection] = useState("asc");
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
 
   const formatCurrency = (amount) => {
     return new Intl.NumberFormat("en-US", {
@@ -54,8 +63,27 @@ export function Customers() {
   };
 
   useEffect(() => {
+    // Read URL parameters and apply filters
+    const standingOrderParam = searchParams.get("standingOrder");
+    const statusParam = searchParams.get("status");
+    const billingCycleParam = searchParams.get("billingCycle");
+    const subscriptionStatusParam = searchParams.get("subscriptionStatus");
+
+    if (standingOrderParam) {
+      setStandingOrderFilter(standingOrderParam);
+    }
+    if (statusParam) {
+      setStatusFilter(statusParam);
+    }
+    if (billingCycleParam) {
+      setBillingCycleFilter(billingCycleParam);
+    }
+    if (subscriptionStatusParam) {
+      setSubscriptionStatusFilter(subscriptionStatusParam);
+    }
+
     loadCustomers();
-  }, []);
+  }, [searchParams]);
 
   const loadCustomers = async () => {
     try {
@@ -67,11 +95,13 @@ export function Customers() {
       setCustomers(customersList);
       setFilteredCustomers(customersList);
 
-      // Load subscription prices, next billing dates, and last payment dates for all customers
+      // Load subscription prices, next billing dates, last payment dates, billing cycles, and subscription statuses
       await Promise.all([
         loadSubscriptionPrices(customersList),
         loadNextBillingDates(customersList),
         loadLastPaymentDates(customersList),
+        loadCustomerBillingCycles(customersList),
+        loadCustomerSubscriptionStatuses(customersList),
       ]);
     } catch (error) {
       console.error("Error loading customers:", error);
@@ -308,6 +338,118 @@ export function Customers() {
     }
   };
 
+  const loadCustomerBillingCycles = async (customersList) => {
+    try {
+      const cyclesMap = {};
+
+      // Get all subscriptions
+      const subscriptionsSnapshot = await getDocs(
+        collection(db, "subscriptions")
+      );
+      const subscriptions = [];
+      const planIds = new Set();
+
+      subscriptionsSnapshot.forEach((doc) => {
+        const data = doc.data();
+        subscriptions.push({ id: doc.id, ...data });
+        if (data.planId?.id) {
+          planIds.add(data.planId.id);
+        }
+      });
+
+      // Load all plan details
+      const plansMap = {};
+      await Promise.all(
+        Array.from(planIds).map(async (planId) => {
+          try {
+            const planDoc = await getDoc(doc(db, "plans", planId));
+            if (planDoc.exists()) {
+              plansMap[planId] = planDoc.data();
+            }
+          } catch (error) {
+            console.error(`Error loading plan ${planId}:`, error);
+          }
+        })
+      );
+
+      // Map billing cycles to customers
+      for (const customer of customersList) {
+        const customerSubscriptions = subscriptions.filter((sub) => {
+          let subCustomerId = null;
+          if (sub.customerId) {
+            if (sub.customerId.id) {
+              subCustomerId = sub.customerId.id;
+            } else if (sub.customerId.path) {
+              const pathParts = sub.customerId.path.split("/");
+              subCustomerId = pathParts[pathParts.length - 1];
+            }
+          }
+          return (
+            subCustomerId === customer.id &&
+            (sub.status === "ACTIVE" || sub.status === "TRIAL")
+          );
+        });
+
+        const cycles = new Set();
+        for (const sub of customerSubscriptions) {
+          const planId =
+            sub.planId?.id || sub.planId?.path?.split("/").pop() || sub.planId;
+          if (planId && plansMap[planId]) {
+            cycles.add(plansMap[planId].billingCycle);
+          }
+        }
+        cyclesMap[customer.id] = Array.from(cycles);
+      }
+
+      setCustomerBillingCycles(cyclesMap);
+    } catch (error) {
+      console.error("Error loading customer billing cycles:", error);
+    }
+  };
+
+  const loadCustomerSubscriptionStatuses = async (customersList) => {
+    try {
+      const statusesMap = {};
+
+      // Get all subscriptions
+      const subscriptionsSnapshot = await getDocs(
+        collection(db, "subscriptions")
+      );
+      const subscriptions = [];
+
+      subscriptionsSnapshot.forEach((doc) => {
+        const data = doc.data();
+        subscriptions.push({ id: doc.id, ...data });
+      });
+
+      // Map subscription statuses to customers
+      for (const customer of customersList) {
+        const customerSubscriptions = subscriptions.filter((sub) => {
+          let subCustomerId = null;
+          if (sub.customerId) {
+            if (sub.customerId.id) {
+              subCustomerId = sub.customerId.id;
+            } else if (sub.customerId.path) {
+              const pathParts = sub.customerId.path.split("/");
+              subCustomerId = pathParts[pathParts.length - 1];
+            }
+          }
+          return subCustomerId === customer.id;
+        });
+
+        const statuses = new Set();
+        for (const sub of customerSubscriptions) {
+          statuses.add(sub.status);
+        }
+        statusesMap[customer.id] = Array.from(statuses);
+      }
+
+      setCustomerSubscriptionStatuses(statusesMap);
+    } catch (error) {
+      console.error("Error loading customer subscription statuses:", error);
+    }
+  };
+
   const formatDate = (date) => {
     if (!date) return "N/A";
     if (!(date instanceof Date)) return "N/A";
@@ -416,6 +558,37 @@ export function Customers() {
       );
     }
 
+    // Apply standing order filter
+    if (standingOrderFilter !== "ALL") {
+      if (standingOrderFilter === "NO_STANDING_ORDER") {
+        filtered = filtered.filter(
+          (customer) => customer.excludeFromDashboard === true
+        );
+      } else if (standingOrderFilter === "HAS_STANDING_ORDER") {
+        filtered = filtered.filter(
+          (customer) =>
+            !customer.excludeFromDashboard ||
+            customer.excludeFromDashboard === false
+        );
+      }
+    }
+
+    // Apply billing cycle filter
+    if (billingCycleFilter !== "ALL") {
+      filtered = filtered.filter((customer) => {
+        const cycles = customerBillingCycles[customer.id] || [];
+        return cycles.includes(billingCycleFilter);
+      });
+    }
+
+    // Apply subscription status filter
+    if (subscriptionStatusFilter !== "ALL") {
+      filtered = filtered.filter((customer) => {
+        const statuses = customerSubscriptionStatuses[customer.id] || [];
+        return statuses.includes(subscriptionStatusFilter);
+      });
+    }
+
     // Apply sorting
     const sorted = sortCustomers(filtered);
     setFilteredCustomers(sorted);
@@ -423,12 +596,17 @@ export function Customers() {
   }, [
     searchTerm,
     statusFilter,
+    standingOrderFilter,
+    billingCycleFilter,
+    subscriptionStatusFilter,
     customers,
     sortColumn,
     sortDirection,
     subscriptionPrices,
     nextBillingDates,
     lastPaymentDates,
+    customerBillingCycles,
+    customerSubscriptionStatuses,
   ]);
 
   const handleEditCustomer = (customer) => {
@@ -440,6 +618,7 @@ export function Customers() {
       storeId: customer.storeId || "",
       bankName: customer.bankName || "",
       status: customer.status || "ACTIVE",
+      excludeFromDashboard: customer.excludeFromDashboard || false,
     });
     setModalOpen(true);
   };
@@ -458,6 +637,7 @@ export function Customers() {
         storeId: customerData.storeId || "",
         bankName: customerData.bankName || "",
         status: customerData.status || "ACTIVE",
+        excludeFromDashboard: customerData.excludeFromDashboard || false,
       });
       setModalOpen(false);
       setEditingCustomer(null);
@@ -468,6 +648,7 @@ export function Customers() {
         storeId: "",
         bankName: "",
         status: "ACTIVE",
+        excludeFromDashboard: false,
       });
       await showSuccess("Customer updated successfully!");
       loadCustomers();
@@ -623,6 +804,7 @@ export function Customers() {
         storeId: customerData.storeId || "",
         bankName: customerData.bankName || "",
         status: customerData.status || "ACTIVE",
+        excludeFromDashboard: customerData.excludeFromDashboard || false,
       });
       setModalOpen(false);
       setCustomerData({
@@ -632,6 +814,7 @@ export function Customers() {
         storeId: "",
         bankName: "",
         status: "ACTIVE",
+        excludeFromDashboard: false,
       });
       await showSuccess("Customer created successfully!");
       loadCustomers();
@@ -670,6 +853,7 @@ export function Customers() {
                 storeId: "",
                 bankName: "",
                 status: "ACTIVE",
+                excludeFromDashboard: false,
               });
               setModalOpen(true);
             }}
@@ -698,11 +882,46 @@ export function Customers() {
           <option value="PENDING">Pending</option>
           <option value="LEFT">Left</option>
         </select>
-        {(searchTerm || statusFilter !== "ALL") && (
+        <select
+          value={standingOrderFilter}
+          onChange={(e) => setStandingOrderFilter(e.target.value)}
+          className="status-filter-select"
+        >
+          <option value="ALL">All Standing Orders</option>
+          <option value="HAS_STANDING_ORDER">Has Standing Order</option>
+          <option value="NO_STANDING_ORDER">No Standing Order</option>
+        </select>
+        <select
+          value={billingCycleFilter}
+          onChange={(e) => setBillingCycleFilter(e.target.value)}
+          className="status-filter-select"
+        >
+          <option value="ALL">All Billing Cycles</option>
+          <option value="WEEKLY">Weekly</option>
+          <option value="MONTHLY">Monthly</option>
+        </select>
+        <select
+          value={subscriptionStatusFilter}
+          onChange={(e) => setSubscriptionStatusFilter(e.target.value)}
+          className="status-filter-select"
+        >
+          <option value="ALL">All Subscription Status</option>
+          <option value="ACTIVE">Active</option>
+          <option value="SUSPENDED">Paused</option>
+          <option value="TRIAL">Trial</option>
+        </select>
+        {(searchTerm ||
+          statusFilter !== "ALL" ||
+          standingOrderFilter !== "ALL" ||
+          billingCycleFilter !== "ALL" ||
+          subscriptionStatusFilter !== "ALL") && (
           <button
             onClick={() => {
               setSearchTerm("");
               setStatusFilter("ALL");
+              setStandingOrderFilter("ALL");
+              setBillingCycleFilter("ALL");
+              setSubscriptionStatusFilter("ALL");
             }}
             className="clear-search-btn"
           >
@@ -801,9 +1020,37 @@ export function Customers() {
                 {paginatedCustomers.map((customer) => {
                   const customerStatus = customer.status || "ACTIVE";
                   const subscriptionPrice = subscriptionPrices[customer.id];
+                  const hasNoStandingOrder =
+                    customer.excludeFromDashboard === true;
                   return (
                     <tr key={customer.id}>
-                      <td>{customer.name}</td>
+                      <td>
+                        <div
+                          style={{
+                            display: "flex",
+                            alignItems: "center",
+                            gap: "8px",
+                          }}
+                        >
+                          {customer.name}
+                          {hasNoStandingOrder && (
+                            <span
+                              style={{
+                                backgroundColor: "#fef3c7",
+                                color: "#92400e",
+                                padding: "2px 8px",
+                                borderRadius: "4px",
+                                fontSize: "11px",
+                                fontWeight: "600",
+                                whiteSpace: "nowrap",
+                              }}
+                              title="No standing order - invoices excluded from dashboard"
+                            >
+                              No Standing Order
+                            </span>
+                          )}
+                        </div>
+                      </td>
                       <td>{customer.storeId || "N/A"}</td>
                       <td>
                         <span
@@ -908,6 +1155,7 @@ export function Customers() {
             storeId: "",
             bankName: "",
             status: "ACTIVE",
+            excludeFromDashboard: false,
           });
         }}
         title={editingCustomer ? "Edit Customer" : "Add New Customer"}
@@ -998,6 +1246,37 @@ export function Customers() {
               <option value="LEFT">Left</option>
             </select>
           </div>
+          <div className="form-group">
+            <label
+              htmlFor="excludeFromDashboard"
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "8px",
+                cursor: "pointer",
+              }}
+            >
+              <input
+                type="checkbox"
+                id="excludeFromDashboard"
+                checked={customerData.excludeFromDashboard || false}
+                onChange={(e) =>
+                  setCustomerData({
+                    ...customerData,
+                    excludeFromDashboard: e.target.checked,
+                  })
+                }
+              />
+              <span>Exclude invoices from dashboard (No standing order)</span>
+            </label>
+            <small
+              style={{ color: "#666", marginTop: "4px", display: "block" }}
+            >
+              When checked, invoices for this customer will not appear on the
+              dashboard but will still be generated and visible on the customer
+              profile page.
+            </small>
+          </div>
           <div className="modal-actions">
             <button
               onClick={() => {
@@ -1008,6 +1287,9 @@ export function Customers() {
                   contactPerson: "",
                   contactPhone: "",
                   storeId: "",
+                  bankName: "",
+                  status: "ACTIVE",
+                  excludeFromDashboard: false,
                 });
               }}
               className="btn-secondary"
